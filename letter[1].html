@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Dudu📩</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #ffe6eb;
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden; /* Pinigilan ang scroll ng buong page */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .hint {
+            color: #ff758f;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Container ng buong envelope at sulat */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            width: 320px;
+            height: 220px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        /* Ang mismong likod/katawan ng sobre */
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ffccd5;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        /* Ang triangular flap/takip ng sobre */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 130px solid #ffb3c1;
+            transform-origin: top;
+            transition: transform 0.4s ease-in-out 0.1s, z-index 0s linear 0.2s;
+        }
+
+        /* Ang side at bottom folds ng sobre */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 3;
+            border-left: 160px solid #ffccd5;
+            border-right: 160px solid #ffccd5;
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid #ffa4b6;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        /* Ang mismong papel sa loob */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            width: 290px;
+            height: 190px;
+            background: white;
+            border-radius: 8px;
+            z-index: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.5s ease-in-out, height 0.5s ease-in-out;
+            overflow-y: auto; /* Pwedeng i-scroll ang text sa loob kung mahaba */
+        }
+
+        /* Text layout sa loob ng sulat */
+        .letter-text {
+            color: #4a4a4a;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+            white-space: pre-line;
+        }
+
+        .letter-title {
+            color: #ff4d6d;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Cute sticker/heart seal ng sobre */
+        .heart-seal {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            font-size: 32px;
+            transition: transform 0.4s, opacity 0.3s;
+        }
+
+        /* --- BAGONG ANIMATION: NAKAPWESTO SA GITNA PAG BUKAS --- */
+        
+        /* Ibababa nang kaunti ang wrapper para pambalanse */
+        .envelope-wrapper.open {
+            transform: translateY(70px);
+        }
+
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0; /* Mapupunta sa likod ang takip kapag nakabukas */
+        }
+
+        /* Itataas ang sulat saktong pabalagbag sa gitna at hihilaan ang taas */
+        .envelope-wrapper.open .letter {
+            transform: translateY(-150px); 
+            height: 280px; 
+            z-index: 6; /* Mapupunta sa pinaka-ibabaw para mabasa at ma-scroll */
+        }
+
+        .envelope-wrapper.open .heart-seal {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.7; }
+        }
+
+        /* Back Button Style */
+        .back-btn {
+            margin-top: 35px;
+            padding: 10px 25px;
+            background-color: #ffb3c1;
+            color: #ff4d6d;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(255, 179, 193, 0.2);
+            transition: .3s;
+            z-index: 10; /* Siniguradong laging naki-click */
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            background-color: #ffccd5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hint" id="hint-text">✨ Tap the envelope to open. ✨</div>
+
+    <!-- Buong interactive envelope component -->
+    <div class="envelope-wrapper" onclick="toggleLetter(this)">
+        <div class="envelope">
+            <div class="letter">
+                <div class="letter-title">Dear Dudu, 🤍</div>
+                <p class="letter-text">
+                    Hi Dudu! Happy 2nd Monthsary! 🤍 Always remember that I love you and I appreciate everything you do for me, kahit na feel mo na it’s still not enough. I hope you know na it already means the world to me jusko kahit maliit pa 'yan sofer happy na ako(hindi nga lang showy). And always remember that I’m always here for you, kahit na we only get to talk through chat. Please bear with me if sometimes eh hindi ko alam kung ano ang sasabihin ko sa'yo kapag nagra-rant ka. Wala eh forda listen lang lagi ang ferson eh HAHAHAHA. I’m so grateful na nakilala kita; kahit na ganito yung situtaion natin, I'm still happy kahit na mahirap BDO ngani HAHAHAHA. Sana hindi ka na masyadong mag-overthink, jusko ikaw lang naman palaging laman ng heart ko HAHAHAHA. And always sleep early naa, don't stay up late palagi. Lagi banaman mga 2-4 AM natutulog HAHAHAHA.
+
+That's all, I hope you liked this little gift na ginawa ko para sa'yo HAHAHAHA. Aamin ako syempre baka magtaka ka eh. Bby nagpatulong ako sa AI para magawa 'to. Ako lang tiga instruct kung anong bet ko na format at tiga edit ng ibang need baguhin huhu, alam mo naman begginer pa lang HAHAHAHA asa na makagawa agad ng ganito kaayos not totally ayos kasi di rin naman perfect basta keri na mapindot HAHAHAHA. Ayun lang, sana nagustuhan mo pa rin. Babawi na lang po ako ng physical gift soon kapag may piduy na si self HAHAHAHHA. I love you so much! Mwuahhhh 😘
+                    
+                    Love,
+                    Bubu🤍
+                </p>
+            </div>
+        </div>
+        <div class="heart-seal">🤍</div>
+    </div>
+
+    <!-- Button pabalik sa main screen -->
+    <button class="back-btn" onclick="location.href='home.html'">◀ Back</button>
+
+    <script>
+        function toggleLetter(envelopeElement) {
+            envelopeElement.classList.toggle('open');
+            const hint = document.getElementById('hint-text');
+            
+            if(envelopeElement.classList.contains('open')) {
+                hint.innerText = "✨ Tap the envelope to close the letter ✨";
+            } else {
+                hint.innerText = "✨ Tap the envelope to open the letter ✨";
+            }
+        }
+    </script>
+</body>
+</html>

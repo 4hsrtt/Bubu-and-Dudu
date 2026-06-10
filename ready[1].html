@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Are you excited to open your gift?</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ffe6eb;
+      font-family: 'Fredoka', sans-serif;
+    }
+    
+    .container {
+      background: white;
+      padding: 35px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: min(700px, 90vw);
+    }
+    
+    h1 {
+      color: #ff4d6d;
+    }
+    
+    .buttons {
+      margin-top: 25px;
+    }
+    
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 18px;
+      font-family: 'Fredoka', sans-serif;
+    }
+    
+    .yes {
+      background: #ff4d6d;
+      color: white;
+    }
+    
+    .no {
+      background: #ffd6dd;
+    }
+    
+    #result {
+      margin-top: 20px;
+    }
+    
+    #result img {
+      width: 180px;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="container">
+    
+    <h1> Are you excited to open your gift?</h1>
+    
+    <div class="buttons">
+      <button class="yes" onclick="yesAnswer()">YES 💖</button>
+      <button class="no" onclick="noAnswer()">NO 😒</button>
+    </div>
+    
+    <div id="result"></div>
+    
+  </div>
+  
+  <script>
+    function yesAnswer() {
+      
+      document.getElementById("result").innerHTML = `
+    <img src="Happy Bubu.gif">
+    <p>Yayy! Let's go, Dudu! 💖</p>
+  `;
+      
+      setTimeout(() => {
+        window.location.href = "home.html";
+      }, 2000);
+      
+    }
+    
+    function noAnswer() {
+      
+      document.getElementById("result").innerHTML = `
+    <img src="Crying Bubu.gif">
+    <p>Aww please Dudu, I prepared it for you 🥺</p>
+  `;
+      
+    }
+  </script>
+  
+</body>
+
+</html>
