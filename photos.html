@@ -32,16 +32,17 @@
             font-size: 16px;
         }
 
-        /* Container ng Gallery */
+        /* Container ng Gallery - Naka-center ang dalawang litrato */
         .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             padding: 10px;
             box-sizing: border-box;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         /* Polaroid Frame Style */
@@ -53,14 +54,16 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             text-align: center;
+            width: 170px; /* Sakto ang laki para sa dalawang litrato */
+            box-sizing: border-box;
         }
 
-        /* Ginawa nating salit-salit na medyo tabingi para mas cute tingnan */
-        .polaroid:nth-child(even) {
-            transform: rotate(3deg);
-        }
-        .polaroid:nth-child(odd) {
+        /* Katamtamang pagka-tabingi ng dalawang litrato */
+        .polaroid:nth-child(1) {
             transform: rotate(-3deg);
+        }
+        .polaroid:nth-child(2) {
+            transform: rotate(3deg);
         }
 
         .polaroid:hover {
@@ -78,12 +81,13 @@
             background-color: #f5f5f5;
         }
 
-        /* Caption o sulat sa ilalim ng bawat litrato */
+        /* Caption o sulat sa ilalim */
         .caption {
             margin-top: 12px;
             color: #ff4d6d;
             font-size: 14px;
             font-weight: 500;
+            line-height: 1.3;
         }
 
         /* --- LIGHTBOX (PANG ZOOM-IN NG PICTURE) --- */
@@ -145,40 +149,22 @@
     <h1>📸 Our Memory Lane</h1>
     <div class="subtitle">Tap the picture to zoom image</div>
 
-    <!-- DITO MO ILALAGAY ANG MGA LITRATO MO -->
     <div class="gallery-container">
         
-        <!-- Litrato 1 -->
         <div class="polaroid" onclick="zoomImage(this)">
-            <!-- Palitan ang src ng pangalan ng file mo, ex: "photo1.jpg" o internet link -->
             <img src="webcam.jpg" alt="Memory 1">
             <div class="caption">Pics sa malinaw na webcam HAHAHAHA eme</div>
         </div>
 
-        <!-- Litrato 2 -->
         <div class="polaroid" onclick="zoomImage(this)">
-            <img src="maem.jpg" alt="Memory 2">
-            <div class="caption">Taken by maem Luna</div>
-        </div>
-
-        <!-- Litrato 3 -->
-        <div class="polaroid" onclick="zoomImage(this)">
-            <img src="crop.jpg" alt="Memory 3">
-            <div class="caption">️Cropped sa instant ni maem Alia HAHAHAHA</div>
-        </div>
-
-        <!-- Litrato 4 -->
-        <div class="polaroid" onclick="zoomImage(this)">
-            <img src="pic.jpg" alt="Memory 4">
-            <div class="caption">Pic daw w/ sir Kins</div>
+            <img src="crop.jpg" alt="Memory 2">
+            <div class="caption">Cropped sa instant ni maem Alia HAHAHAHA</div>
         </div>
 
     </div>
 
-    <!-- Button pabalik sa main screen -->
     <button class="back-btn" onclick="location.href='home.html'">◀ Back</button>
 
-    <!-- Lightbox pop-up overlay -->
     <div id="lightbox" class="lightbox" onclick="closeZoom()">
         <img id="lightbox-img" src="" alt="Zoomed Memory">
     </div>
