@@ -1,73 +1,107 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-<title>Welcome Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Welcome Page</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 15px; /* May space sa gilid para sa maliliit na phone screen */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #ffe6eb;
+      font-family: 'Fredoka', sans-serif;
+      box-sizing: border-box;
+      overflow: hidden; /* Pinipigilan ang hindi malamang pag-scroll */
+    }
+    
+    .container {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(255, 77, 109, 0.12);
+      width: 100%;
+      max-width: 340px; /* Saktong sukat para magkasya sa portrait mobile view */
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .top-image {
+      width: 140px; /* Pinaliit nang kaunti para mas magaan sa screen */
+      max-width: 50%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    
+    h1 { 
+      color: #ff4d6d; 
+      margin: 10px 0 5px 0; 
+      font-size: 22px; /* Responsive size */
+      line-height: 1.3;
+    }
+    
+    h2 { 
+      color: #ff758f; 
+      font-weight: 400; 
+      font-size: 16px; 
+      margin: 5px 0 20px 0; 
+      line-height: 1.2;
+    }
+    
+    /* Responsive Button Style */
+    .proceed-btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      border: none;
+      border-radius: 25px;
+      background: #ff4d6d;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 77, 109, 0.2);
+      transition: 0.3s ease;
+      width: 100%; /* Sasakto sa luwang ng puting card */
+      max-width: 240px;
+      box-sizing: border-box;
+    }
+    
+    .proceed-btn:hover {
+      transform: scale(1.03);
+      background: #ff1e4d;
+    }
 
-<style>
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    font-family: 'Fredoka', sans-serif;
-  }
-  
-  .top-image {
-    width: 180px;
-    max-width: 80%;
-    height: auto;
-    margin-bottom: 20px;
-  }
-  
-  .container {
-    text-align: center;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-  
-  h1 {
-    color: #ff4d6d;
-  }
-  
-  button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    background: #ff4d6d;
-    color: white;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #ff1e4d;
-  }
-</style>
-
+    /* Karagdagang adjustment para sa mga napakaliit na phone (gaya ng iPhone SE) */
+    @media (max-height: 600px) {
+      .container { padding: 15px; }
+      .top-image { width: 100px; }
+      h1 { font-size: 19px; }
+      h2 { font-size: 14px; margin-bottom: 15px; }
+      .proceed-btn { padding: 10px 20px; font-size: 15px; }
+    }
+  </style>
 </head>
 <body>
-  
+
   <div class="container">
-    <img src="Bubu Welcome.jpg" class="top-image">
-    
+    <img src="Bubu Welcome.jpg" class="top-image" alt="Bubu Welcome">
     <h1>Happy Monthsary, Dudu! 🤍</h1>
     <h2>I'm Happy you're here!</h2>
+    
+    <button class="proceed-btn" onclick="window.location.href='password.html'">
+      Click to Proceed
+    </button>
   </div>
-  
-  <div class="button-container" style="margin-top: 30px;">
-  <button onclick="window.location.href='password.html'">
-    Click to Proceed
-  </button>
-</div>
 
 </body>
 </html>
