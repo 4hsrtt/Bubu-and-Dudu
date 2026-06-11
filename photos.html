@@ -23,71 +23,72 @@
         h1 {
             color: #ff4d6d;
             margin: 10px 0 5px 0;
-            font-size: 28px;
+            font-size: 32px; /* Bahagyang pinalaki para sa malaking screen */
         }
 
         .subtitle {
             color: #ff758f;
-            margin: 0 0 25px 0;
-            font-size: 16px;
+            margin: 0 0 30px 0;
+            font-size: 18px;
         }
 
-        /* Container ng Gallery - Naka-center ang dalawang litrato */
+        /* Container ng Gallery - Responsive Grid */
         .gallery-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dynamic width para sa desktop */
+            gap: 30px; /* Mas malaking space sa pagitan */
             width: 100%;
-            max-width: 600px;
+            max-width: 1200px; /* Pinalapad ang maximum width para sa laptop/desktop */
             padding: 10px;
             box-sizing: border-box;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
+            justify-items: center; /* Naka-center ang mga polaroid sa grid nila */
         }
 
-        /* Polaroid Frame Style */
+        /* Polaroid Frame Style - responsive size */
         .polaroid {
             background: white;
-            padding: 12px 12px 25px 12px;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 15px 15px 30px 15px; /* Dinagdagan ang padding */
+            border-radius: 6px; /* Bahagyang mas rounded */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             text-align: center;
-            width: 170px; /* Sakto ang laki para sa dalawang litrato */
+            width: 100%; /* Gamitin ang buong luwang ng grid cell */
+            max-width: 500px; /* Pero huwag masyadong lumaki kapag iisa lang */
             box-sizing: border-box;
         }
 
-        /* Katamtamang pagka-tabingi ng dalawang litrato */
+        /* Katamtamang pagka-tabingi */
         .polaroid:nth-child(1) {
-            transform: rotate(-3deg);
+            transform: rotate(-2deg);
         }
         .polaroid:nth-child(2) {
-            transform: rotate(3deg);
+            transform: rotate(2deg);
         }
 
         .polaroid:hover {
-            transform: scale(1.05) rotate(0deg);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: scale(1.03) rotate(0deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
             z-index: 5;
         }
 
-        /* Ang mismong imahe sa loob ng polaroid */
+        /* Ang mismong imahe sa loob ng polaroid - Responsive Size */
         .polaroid img {
             width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 2px;
+            height: 350px; /* Mas mataas para sa laptop view */
+            object-fit: cover; /* Pinapanatili ang aspect ratio habang nagka-crop */
+            border-radius: 4px;
             background-color: #f5f5f5;
         }
 
         /* Caption o sulat sa ilalim */
         .caption {
-            margin-top: 12px;
+            margin-top: 15px;
             color: #ff4d6d;
-            font-size: 14px;
+            font-size: 16px; /* Bahagyang pinalaki ang font */
             font-weight: 500;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         /* --- LIGHTBOX (PANG ZOOM-IN NG PICTURE) --- */
@@ -98,7 +99,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85); /* Mas madilim na background */
             z-index: 100;
             justify-content: center;
             align-items: center;
@@ -106,11 +107,11 @@
         }
 
         .lightbox img {
-            max-width: 90%;
-            max-height: 80%;
-            border: 8px solid white;
+            max-width: 95%; /* Mas malaking zoom view */
+            max-height: 90%;
+            border: 10px solid white; /* Mas makapal na border sa zoom */
             border-radius: 4px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.6);
             transform: scale(0.9);
             transition: transform 0.3s ease;
         }
@@ -125,16 +126,16 @@
 
         /* Back Button Style */
         .back-btn {
-            padding: 10px 25px;
+            padding: 12px 30px;
             background-color: #ffb3c1;
             color: #ff4d6d;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 16px;
             font-family: 'Fredoka', sans-serif;
             font-weight: 500;
-            box-shadow: 0 4px 10px rgba(255, 179, 193, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 179, 193, 0.25);
             transition: .3s;
         }
 
@@ -142,11 +143,38 @@
             transform: scale(1.05);
             background-color: #ffccd5;
         }
+
+        /* --- MOBILE ADJUSTMENTS (Kung sa phone binuksan) --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 26px; }
+            .subtitle { font-size: 15px; }
+            
+            .gallery-container {
+                grid-template-columns: 1fr; /* Isa-isa na lang sa phone screen */
+                gap: 20px;
+                padding: 5px;
+            }
+
+            .polaroid {
+                width: 85%; /* Huwag sakupin ang buong width ng phone */
+                max-width: 320px;
+                padding: 10px 10px 20px 10px;
+            }
+            
+            .polaroid img {
+                height: 250px; /* Mas maikli sa phone view para hindi ma-scroll */
+            }
+
+            .caption {
+                font-size: 14px;
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h1>📸 Our Memory Lane</h1>
+    <h1>🤍 Us 🤍</h1>
     <div class="subtitle">Tap the picture to zoom image</div>
 
     <div class="gallery-container">
