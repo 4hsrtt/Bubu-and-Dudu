@@ -13,7 +13,7 @@
     if (pin === "041426") {
       document.getElementById("message").innerHTML = `
         <img src="Happy Bubu.gif">
-        <p>💖 Aww you remembered! 🥺</p>
+        <p>💖 Aww you remembered! 🥹</p>
       `;
       setTimeout(() => {
         window.location.href = "ready.html";
@@ -21,7 +21,7 @@
     } else {
       document.getElementById("message").innerHTML = `
         <img src="Mad Bubu.jpg">
-        <p>Wrong, Dudu! Try again! 😒😒</p>
+        <p>Wrong, Bubu! Try again! 😒😒</p>
       `;
       setTimeout(() => { clearPin(); }, 1500);
     }
