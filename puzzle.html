@@ -8,8 +8,8 @@
   <style>
     /* --- GLOBAL STYLES --- */
     :root {
-      --slot-size: 100px;
-      --board-size: 300px;
+      --slot-size: 75px;   /* Sukat ng bawat piraso sa Desktop */
+      --board-size: 300px; /* 75px * 4 = 300px kabuuang sukat */
     }
 
     body {
@@ -22,7 +22,7 @@
       box-sizing: border-box;
     }
 
-    /* --- SIDEBAR MENU (DESKTOP) --- */
+    /* --- SIDEBAR MENU --- */
     .sidebar {
       width: 260px;
       background: white;
@@ -83,7 +83,7 @@
       text-align: center;
     }
 
-    /* Controls Row (Undo, Shuffle, Back) */
+    /* Controls */
     .controls {
       display: flex;
       gap: 10px;
@@ -119,11 +119,11 @@
       box-sizing: border-box;
     }
 
-    /* Ang Grid kung saan idodrop ang pieces */
+    /* INAYOS SA 4X4 GRID */
     .puzzle-grid {
       display: grid;
-      grid-template-columns: repeat(3, var(--slot-size));
-      grid-template-rows: repeat(3, var(--slot-size));
+      grid-template-columns: repeat(4, var(--slot-size));
+      grid-template-rows: repeat(4, var(--slot-size));
       border: 3px dashed #ffb3c1;
       background: #fff9fa;
       width: var(--board-size);
@@ -142,7 +142,7 @@
 
     /* Lalagyan ng mga natitirang pieces */
     .pieces-pool {
-      width: 120px;
+      width: 140px; /* Bahagyang pinalapad para sa 16 pieces */
       height: var(--board-size);
       border: 2px solid #ffccd5;
       background: #fff0f2;
@@ -150,16 +150,16 @@
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
-      gap: 8px;
+      gap: 6px;
       padding: 10px;
       box-sizing: border-box;
       overflow-y: auto;
     }
 
-    /* Ang mismong kapirasong puzzle */
+    /* Ang mismong piraso ng puzzle */
     .puzzle-piece {
-      width: calc(var(--slot-size) - 10px);
-      height: calc(var(--slot-size) - 10px);
+      width: calc(var(--slot-size) - 6px);
+      height: calc(var(--slot-size) - 6px);
       background-size: var(--board-size) var(--board-size);
       border: 1px solid rgba(0,0,0,0.15);
       border-radius: 4px;
@@ -168,7 +168,7 @@
     }
     .puzzle-piece:active { cursor: grabbing; }
 
-    /* Win Message Popup */
+    /* Win Popup */
     .win-popup {
       display: none;
       position: fixed;
@@ -186,28 +186,27 @@
     }
     .win-popup h2 { color: #ff4d6d; font-size: 24px; margin: 0 0 10px 0; }
 
-    /* --- MOBILE RESPONSIVE ADJUSMENTS --- */
+    /* --- MOBILE RESPONSIVE ADJUSMENTS (PHONE) --- */
     @media (max-width: 768px) {
       :root {
-        --slot-size: 80px;  /* Pinaliit para magkasya sa phone */
-        --board-size: 240px;
+        --slot-size: 65px;  /* Saktong laki para magkasya ang 4x4 sa screen ng kahit anong phone */
+        --board-size: 260px; /* 65px * 4 = 260px */
       }
       
       body {
-        flex-direction: column; /* Ginawang vertical ang takbo ng page */
+        flex-direction: column;
       }
 
-      /* Sidebar ay naging Top Navigation bar */
       .sidebar {
         width: 100%;
         flex-direction: row;
-        overflow-x: auto; /* Pwedeng i-swipe pakaliwa/pakanan ang mga button */
+        overflow-x: auto;
         padding: 12px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         gap: 10px;
       }
       .sidebar h2 {
-        display: none; /* Tinanggal ang text na "Select Theme" para tipid sa space */
+        display: none;
       }
       .theme-btn {
         padding: 8px 14px;
@@ -220,12 +219,11 @@
       h1 { font-size: 22px; }
 
       .puzzle-board {
-        flex-direction: column; /* Pinagpatong ang Grid at Pool */
+        flex-direction: column;
         padding: 12px;
         gap: 15px;
       }
 
-      /* Lalagyan ng pieces ay napunta sa ilalim at naging pahiga */
       .pieces-pool {
         width: var(--board-size);
         height: 85px;
@@ -240,6 +238,7 @@
 </head>
 <body>
 
+  <!-- SIDEBAR MENU -->
   <div class="sidebar">
     <h2>Select Theme ✨</h2>
     <button class="theme-btn active" onclick="changeTheme('botworld.jpg', this)">🤖 Botworld Buddies</button>
@@ -248,17 +247,21 @@
     <button class="theme-btn" onclick="changeTheme('custom.jpg', this)">💖 Memory Photo 4</button>
   </div>
 
+  <!-- MAIN WINDOW -->
   <div class="main-game">
-    <h1>🧩 Love Puzzle</h1>
-    <div class="status">Complete the picture to unlock!</div>
+    <h1>🧩 Love Puzzle (4x4)</h1>
+    <div class="status">Complete all 16 pieces to unlock!</div>
 
+    <!-- MGA CONTROLS -->
     <div class="controls">
       <button class="control-btn btn-undo" onclick="undoMove()">↩ Undo</button>
       <button class="control-btn btn-shuffle" onclick="shufflePuzzle()">🔀 Shuffle</button>
       <button class="control-btn btn-back" onclick="location.href='home.html'">◀ Back</button>
     </div>
 
+    <!-- PUZZLE BOARD -->
     <div class="puzzle-board">
+      <!-- 4x4 Grid Board (16 slots) -->
       <div class="puzzle-grid" id="grid">
         <div class="grid-slot" data-index="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         <div class="grid-slot" data-index="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -269,12 +272,21 @@
         <div class="grid-slot" data-index="6" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         <div class="grid-slot" data-index="7" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         <div class="grid-slot" data-index="8" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="9" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="10" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="11" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="12" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="13" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="14" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="15" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       </div>
 
+      <!-- Lalagyan ng mga piraso -->
       <div class="pieces-pool" id="pool"></div>
     </div>
   </div>
 
+  <!-- WIN POPUP -->
   <div id="winPopup" class="win-popup">
     <h2>🎉 Yey! You Did It!</h2>
     <p>Ang galing naman ng Dudu ko! 🥺💖</p>
@@ -285,11 +297,12 @@
     let currentImage = 'botworld.jpg';
     let historyStack = [];
 
-    // Gagamit tayo ng percentages para kahit anong sukat ng slot (100px o 80px), sakto pa rin ang crop ng image backgrounds
+    // 4x4 Positions matrix para sa background image slicing (0%, 33.33%, 66.66%, 100%)
     const positions = [
-      {x: '0%', y: '0%'},   {x: '50%', y: '0%'},   {x: '100%', y: '0%'},
-      {x: '0%', y: '50%'},  {x: '50%', y: '50%'},  {x: '100%', y: '50%'},
-      {x: '0%', y: '100%'}, {x: '50%', y: '100%'}, {x: '100%', y: '100%'}
+      {x: '0%', y: '0%'},     {x: '33.33%', y: '0%'},     {x: '66.66%', y: '0%'},     {x: '100%', y: '0%'},
+      {x: '0%', y: '33.33%'}, {x: '33.33%', y: '33.33%'}, {x: '66.66%', y: '33.33%'}, {x: '100%', y: '33.33%'},
+      {x: '0%', y: '66.66%'}, {x: '33.33%', y: '66.66%'}, {x: '66.66%', y: '66.66%'}, {x: '100%', y: '66.66%'},
+      {x: '0%', y: '100%'},   {x: '33.33%', y: '100%'},   {x: '66.66%', y: '100%'},   {x: '100%', y: '100%'}
     ];
 
     window.onload = function() {
@@ -312,7 +325,8 @@
       historyStack = [];
 
       let pieces = [];
-      for(let i = 0; i < 9; i++) {
+      // Gumawa ng 16 pieces ngayon
+      for(let i = 0; i < 16; i++) {
         let piece = document.createElement('div');
         piece.className = 'puzzle-piece';
         piece.id = 'piece-' + i;
@@ -321,13 +335,13 @@
         piece.style.backgroundImage = `url('${currentImage}')`;
         piece.style.backgroundPosition = `${positions[i].x} ${positions[i].y}`;
         
-        // Touch events para sa mobile phones (Drag support)
         piece.ondragstart = function(e) {
           e.dataTransfer.setData('text', e.target.id);
         };
         pieces.push(piece);
       }
 
+      // I-shuffle ang 16 piraso
       pieces.sort(() => Math.random() - 0.5);
       pieces.forEach(p => pool.appendChild(p));
     }
