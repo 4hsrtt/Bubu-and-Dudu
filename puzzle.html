@@ -1,374 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Puzzle 🧩</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Love Puzzle Game 🧩</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* --- GLOBAL STYLES --- */
+    :root {
+      --slot-size: 100px;
+      --board-size: 300px;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #ffe6eb;
-            font-family: 'Fredoka', sans-serif;
-            padding: 15px;
-            box-sizing: border-box;
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: row;
+      background: #ffe6eb;
+      font-family: 'Fredoka', sans-serif;
+      box-sizing: border-box;
+    }
 
-        h1 {
-            color: #ff4d6d;
-            margin: 0 0 5px 0;
-            font-size: 28px;
-        }
+    /* --- SIDEBAR MENU (DESKTOP) --- */
+    .sidebar {
+      width: 260px;
+      background: white;
+      padding: 20px;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    .sidebar h2 {
+      color: #ff4d6d;
+      font-size: 20px;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    .theme-btn {
+      padding: 12px;
+      background: #fff0f2;
+      color: #ff758f;
+      border: 2px solid #ffccd5;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      transition: 0.2s;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .theme-btn:hover, .theme-btn.active {
+      background: #ff4d6d;
+      color: white;
+      border-color: #ff4d6d;
+    }
 
-        .instruction {
-            color: #ff758f;
-            margin: 0 0 15px 0;
-            font-size: 16px;
-        }
+    /* --- MAIN GAME AREA --- */
+    .main-game {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      color: #ff4d6d;
+      margin: 0 0 5px 0;
+      font-size: 28px;
+      text-align: center;
+    }
+    .status {
+      color: #ff758f;
+      margin-bottom: 15px;
+      font-size: 15px;
+      text-align: center;
+    }
 
-        /* Naka-row na ngayon para nakapahiga ang layout */
-        .game-wrapper {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: center;
-            gap: 25px;
-            background: white;
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            max-width: 100%;
-        }
+    /* Controls Row (Undo, Shuffle, Back) */
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      justify-content: center;
+    }
+    .control-btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: 0.2s;
+    }
+    .btn-undo { background: #ffccd5; color: #ff4d6d; }
+    .btn-shuffle { background: #ff758f; color: white; }
+    .btn-back { background: #ccc; color: #333; }
+    .control-btn:hover { transform: scale(1.05); }
 
-        /* Kaliwang Column: Board at Buttons */
-        .left-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
+    /* Puzzle Layout Board */
+    .puzzle-board {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(255, 77, 109, 0.08);
+      box-sizing: border-box;
+    }
 
-        /* Kanang Column: Reference at Bank ng Pieces */
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
+    /* Ang Grid kung saan idodrop ang pieces */
+    .puzzle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, var(--slot-size));
+      grid-template-rows: repeat(3, var(--slot-size));
+      border: 3px dashed #ffb3c1;
+      background: #fff9fa;
+      width: var(--board-size);
+      height: var(--board-size);
+      box-sizing: border-box;
+    }
+    .grid-slot {
+      border: 1px dashed #ffe6eb;
+      width: var(--slot-size);
+      height: var(--slot-size);
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* Ang board kung saan idadrop ang mga puzzle piece */
-        #board {
-            display: grid;
-            grid-template-columns: repeat(4, 100px);
-            grid-template-rows: repeat(4, 100px);
-            border: 4px solid #ffb3c1;
-            background-color: #fff0f3;
-            width: 400px;
-            height: 400px;
-            border-radius: 12px;
-            overflow: hidden;
-        }
+    /* Lalagyan ng mga natitirang pieces */
+    .pieces-pool {
+      width: 120px;
+      height: var(--board-size);
+      border: 2px solid #ffccd5;
+      background: #fff0f2;
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 8px;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
 
-        .cell {
-            border: 1px dashed #ffccd5;
-            box-sizing: border-box;
-        }
+    /* Ang mismong kapirasong puzzle */
+    .puzzle-piece {
+      width: calc(var(--slot-size) - 10px);
+      height: calc(var(--slot-size) - 10px);
+      background-size: var(--board-size) var(--board-size);
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 4px;
+      cursor: grab;
+      box-sizing: border-box;
+    }
+    .puzzle-piece:active { cursor: grabbing; }
 
-        /* Lalagyan ng mga nagulong puzzle pieces */
-        #pieces-bank {
-            display: flex;
-            flex-wrap: wrap;
-            width: 220px; /* Ginawang mas makitid para sakto sa gilid */
-            height: 240px; /* May fixed height para hindi humaba pababa */
-            overflow-y: auto; /* Magkakaroon ng mini-scroll dito kung sakali */
-            gap: 6px;
-            padding: 12px;
-            background: #fff5f7;
-            border: 2px dashed #ffb3c1;
-            border-radius: 16px;
-            justify-content: center;
-            align-content: flex-start;
-            box-sizing: border-box;
-        }
+    /* Win Message Popup */
+    .win-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.98);
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 100;
+      width: 80%;
+      max-width: 320px;
+    }
+    .win-popup h2 { color: #ff4d6d; font-size: 24px; margin: 0 0 10px 0; }
 
-        .piece {
-            width: 45px; /* Pinaliit pansamantala sa bank para magkasya */
-            height: 45px;
-            border: 1px solid #ff758f;
-            box-sizing: border-box;
-            cursor: grab;
-            background-repeat: no-repeat;
-            background-size: 400px 400px; /* Importante para mapanatili ang scale ng picture */
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    /* --- MOBILE RESPONSIVE ADJUSMENTS --- */
+    @media (max-width: 768px) {
+      :root {
+        --slot-size: 80px;  /* Pinaliit para magkasya sa phone */
+        --board-size: 240px;
+      }
+      
+      body {
+        flex-direction: column; /* Ginawang vertical ang takbo ng page */
+      }
 
-        /* Kapag dinala na sa board, babalik sa totoong sukat (100x100) */
-        #board .piece {
-            width: 100px;
-            height: 100px;
-            border-radius: 0px;
-        }
+      /* Sidebar ay naging Top Navigation bar */
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto; /* Pwedeng i-swipe pakaliwa/pakanan ang mga button */
+        padding: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        gap: 10px;
+      }
+      .sidebar h2 {
+        display: none; /* Tinanggal ang text na "Select Theme" para tipid sa space */
+      }
+      .theme-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
 
-        .piece:active {
-            cursor: grabbing;
-        }
+      .main-game {
+        padding: 10px;
+      }
+      h1 { font-size: 22px; }
 
-        /* Maliit na Reference Guide Box */
-        .reference-box {
-            text-align: center;
-            background: #fff5f7;
-            padding: 10px;
-            border-radius: 16px;
-            border: 2px solid #ffccd5;
-            width: 200px;
-            box-sizing: border-box;
-        }
+      .puzzle-board {
+        flex-direction: column; /* Pinagpatong ang Grid at Pool */
+        padding: 12px;
+        gap: 15px;
+      }
 
-        .reference-box span {
-            display: block;
-            font-size: 13px;
-            color: #ff4d6d;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        #ref-img {
-            width: 120px; /* Maliit na picture lang para sa guide */
-            height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid #ffb3c1;
-        }
-
-        /* Buttons Styling */
-        .btn-container {
-            display: flex;
-            gap: 12px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #ff4d6d;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 15px;
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 500;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
-            transition: .3s;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            background-color: #ff758f;
-        }
-
-        button.back-btn {
-            background-color: #ffb3c1;
-            color: #ff4d6d;
-            box-shadow: 0 4px 10px rgba(255, 179, 193, 0.2);
-        }
-
-        button.back-btn:hover {
-            background-color: #ffccd5;
-        }
-
-        #win-message {
-            display: none;
-            color: #2ecc71;
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            margin-top: 5px;
-            animation: bounce 0.5s infinite alternate;
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-4px); }
-        }
-
-        /* Responsive para sa mga maliliit na screen ng phone (magiging patayo ulit kapag masikip) */
-        @media (max-width: 700px) {
-            .game-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            #pieces-bank {
-                width: 400px;
-                height: auto;
-            }
-            .piece {
-                width: 80px;
-                height: 80px;
-                background-size: 400px 400px;
-            }
-        }
-    </style>
+      /* Lalagyan ng pieces ay napunta sa ilalim at naging pahiga */
+      .pieces-pool {
+        width: var(--board-size);
+        height: 85px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        align-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>🧩 Our Love Puzzle</h1>
-    <div class="instruction">Solve the Puzzle! 🤍</div>
+  <div class="sidebar">
+    <h2>Select Theme ✨</h2>
+    <button class="theme-btn active" onclick="changeTheme('botworld.jpg', this)">🤖 Botworld Buddies</button>
+    <button class="theme-btn" onclick="changeTheme('ojolove.jpg', this)">🛵 Ojolove</button>
+    <button class="theme-btn" onclick="changeTheme('roblox.jpg', this)">🎮 Roblox Babies</button>
+    <button class="theme-btn" onclick="changeTheme('custom.jpg', this)">💖 Memory Photo 4</button>
+  </div>
 
-    <!-- NAKAPAHIGA NA CONTAINER -->
-    <div class="game-wrapper">
-        
-        <!-- KALIWA: Ang Main Board at Buttons -->
-        <div class="left-column">
-            <div id="board"></div>
-            
-            <div id="win-message">💖 Yayy!Congratulations, Bubu! 💖</div>
+  <div class="main-game">
+    <h1>🧩 Love Puzzle</h1>
+    <div class="status">Complete the picture to unlock!</div>
 
-            <div class="btn-container">
-                <button class="back-btn" onclick="location.href='home.html'">◀ Back</button>
-                <button onclick="initGame()"> Shuffle/Repeat 🔄</button>
-            </div>
-        </div>
-        
-        <!-- KANAN: Reference Guide at Lalagyan ng Piraso -->
-        <div class="right-column">
-            <!-- Maliit na Reference Picture -->
-            <div class="reference-box">
-                <span>Reference:</span>
-                <img id="ref-img" src="" alt="Guide">
-            </div>
-
-            <!-- Dito kukunin ang mga piraso -->
-            <div id="pieces-bank"></div>
-        </div>
-
+    <div class="controls">
+      <button class="control-btn btn-undo" onclick="undoMove()">↩ Undo</button>
+      <button class="control-btn btn-shuffle" onclick="shufflePuzzle()">🔀 Shuffle</button>
+      <button class="control-btn btn-back" onclick="location.href='home.html'">◀ Back</button>
     </div>
 
-    <script>
-        // 1. PALITAN ANG URL NA ITO KAPAG MAY PICTURE KA NA
-        const puzzleImg = "puzzle.png"; 
+    <div class="puzzle-board">
+      <div class="puzzle-grid" id="grid">
+        <div class="grid-slot" data-index="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="6" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="7" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="grid-slot" data-index="8" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      </div>
+
+      <div class="pieces-pool" id="pool"></div>
+    </div>
+  </div>
+
+  <div id="winPopup" class="win-popup">
+    <h2>🎉 Yey! You Did It!</h2>
+    <p>Ang galing naman ng Dudu ko! 🥺💖</p>
+    <button class="control-btn btn-shuffle" onclick="document.getElementById('winPopup').style.display='none'; shufflePuzzle();">Play Again</button>
+  </div>
+
+  <script>
+    let currentImage = 'botworld.jpg';
+    let historyStack = [];
+
+    // Gagamit tayo ng percentages para kahit anong sukat ng slot (100px o 80px), sakto pa rin ang crop ng image backgrounds
+    const positions = [
+      {x: '0%', y: '0%'},   {x: '50%', y: '0%'},   {x: '100%', y: '0%'},
+      {x: '0%', y: '50%'},  {x: '50%', y: '50%'},  {x: '100%', y: '50%'},
+      {x: '0%', y: '100%'}, {x: '50%', y: '100%'}, {x: '100%', y: '100%'}
+    ];
+
+    window.onload = function() {
+      initPuzzle();
+    };
+
+    function changeTheme(imgSrc, btnElement) {
+      currentImage = imgSrc;
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      initPuzzle();
+    }
+
+    function initPuzzle() {
+      const pool = document.getElementById('pool');
+      const slots = document.querySelectorAll('.grid-slot');
+      
+      pool.innerHTML = '';
+      slots.forEach(slot => slot.innerHTML = '');
+      historyStack = [];
+
+      let pieces = [];
+      for(let i = 0; i < 9; i++) {
+        let piece = document.createElement('div');
+        piece.className = 'puzzle-piece';
+        piece.id = 'piece-' + i;
+        piece.draggable = true;
+        piece.setAttribute('data-correct', i);
+        piece.style.backgroundImage = `url('${currentImage}')`;
+        piece.style.backgroundPosition = `${positions[i].x} ${positions[i].y}`;
         
-        const rows = 4;
-        const cols = 4;
-        const pieceWidth = 100;
-        const pieceHeight = 100;
+        // Touch events para sa mobile phones (Drag support)
+        piece.ondragstart = function(e) {
+          e.dataTransfer.setData('text', e.target.id);
+        };
+        pieces.push(piece);
+      }
 
-        const board = document.getElementById('board');
-        const bank = document.getElementById('pieces-bank');
-        const winMessage = document.getElementById('win-message');
-        const refImg = document.getElementById('ref-img');
+      pieces.sort(() => Math.random() - 0.5);
+      pieces.forEach(p => pool.appendChild(p));
+    }
 
-        let pieces = [];
+    function shufflePuzzle() {
+      initPuzzle();
+    }
 
-        function initGame() {
-            board.innerHTML = '';
-            bank.innerHTML = '';
-            winMessage.style.display = 'none';
-            pieces = [];
-            
-            // I-set ang image ng reference box gamit ang kaparehong picture
-            refImg.src = puzzleImg;
+    function allowDrop(e) { e.preventDefault(); }
 
-            // Gumawa ng cells sa board
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell');
-                    cell.dataset.row = r;
-                    cell.dataset.col = c;
-                    
-                    cell.addEventListener('dragover', dragOver);
-                    cell.addEventListener('drop', dropPiece);
-                    board.appendChild(cell);
-                }
-            }
+    function drop(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text');
+      const piece = document.getElementById(id);
+      const slot = e.target;
 
-            // Paghiwa-hiwain ang background image para sa piraso
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const piece = document.createElement('div');
-                    piece.classList.add('piece');
-                    piece.id = `piece-${r}-${c}`;
-                    piece.draggable = true;
-                    
-                    piece.style.backgroundImage = `url('${puzzleImg}')`;
-                    
-                    // Ginamit ang percentage para kahit lumiit ang piraso sa bank, sakto pa rin ang view ng picture slice
-                    let xPercent = (c / (cols - 1)) * 100;
-                    let yPercent = (r / (rows - 1)) * 100;
-                    piece.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
-                    
-                    piece.dataset.correctRow = r;
-                    piece.dataset.correctCol = c;
+      if(slot.classList.contains('grid-slot') && slot.children.length === 0) {
+        historyStack.push({ pieceId: id, from: piece.parentElement });
+        slot.appendChild(piece);
+        checkWin();
+      }
+    }
 
-                    piece.addEventListener('dragstart', dragStart);
+    function undoMove() {
+      if(historyStack.length > 0) {
+        let lastMove = historyStack.pop();
+        let piece = document.getElementById(lastMove.pieceId);
+        lastMove.from.appendChild(piece);
+      }
+    }
 
-                    pieces.push(piece);
-                }
-            }
+    function checkWin() {
+      const slots = document.querySelectorAll('.grid-slot');
+      let win = true;
 
-            shuffle(pieces);
-            pieces.forEach(piece => bank.appendChild(piece));
+      slots.forEach(slot => {
+        if(slot.children.length === 0) {
+          win = false;
+        } else {
+          let piece = slot.children[0];
+          let correctIdx = piece.getAttribute('data-correct');
+          let slotIdx = slot.getAttribute('data-index');
+          if(correctIdx !== slotIdx) {
+            win = false;
+          }
         }
+      });
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        let draggedPiece = null;
-
-        function dragStart(e) {
-            draggedPiece = e.target;
-        }
-
-        function dragOver(e) {
-            e.preventDefault();
-        }
-
-        function dropPiece(e) {
-            e.preventDefault();
-            const cell = e.target;
-
-            if (cell.classList.contains('cell') && cell.children.length === 0) {
-                cell.appendChild(draggedPiece);
-                
-                draggedPiece.dataset.currentRow = cell.dataset.row;
-                draggedPiece.dataset.currentCol = cell.dataset.col;
-                
-                checkWinCondition();
-            }
-        }
-
-        function checkWinCondition() {
-            const placedPieces = board.querySelectorAll('.piece');
-            
-            if (placedPieces.length !== rows * cols) return; 
-
-            let isWin = true;
-            placedPieces.forEach(piece => {
-                if (piece.dataset.currentRow !== piece.dataset.correctRow || 
-                    piece.dataset.currentCol !== piece.dataset.correctCol) {
-                    isWin = false;
-                }
-            });
-
-            if (isWin) {
-                winMessage.style.display = 'block';
-            }
-        }
-
-        window.onload = initGame;
-    </script>
+      if(win) {
+        document.getElementById('winPopup').style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>
